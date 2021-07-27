@@ -1,9 +1,9 @@
 trait Functor[F[*]]:
   def apply[A, B](fa: F[A], f: A => B): F[B]
 
-type Algebra[F[*], A] = Functor[F] ?=> F[A] => A
+type Algebra[F[*], A] = F[A] => A
 
-type Coalgebra[F[*], A] = Functor[F] ?=> A => F[A]
+type Coalgebra[F[*], A] = A => F[A]
 
 type Fix[F[*]]
 
