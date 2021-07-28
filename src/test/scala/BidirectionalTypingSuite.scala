@@ -14,7 +14,7 @@ class BidirectionalTypingSuite extends FunSuite:
   import ExpF.*
 
   given Functor[ExpF] with
-    def apply[A, B](fa: ExpF[A], f: A => B): ExpF[B] =
+    def apply[A, B](fa: ExpF[A])(f: A => B): ExpF[B] =
       fa match
         case fa @ VarF(_) => fa.asInstanceOf[ExpF[B]]
         case fa @ UnitF   => fa.asInstanceOf[ExpF[B]]

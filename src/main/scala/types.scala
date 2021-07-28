@@ -1,5 +1,5 @@
 trait Functor[F[*]]:
-  def apply[A, B](fa: F[A], f: A => B): F[B]
+  def apply[A, B](fa: F[A])(f: A => B): F[B]
 
 type Algebra[F[*], A] = F[A] => A
 

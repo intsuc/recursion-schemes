@@ -7,7 +7,7 @@ class NatSuite extends FunSuite:
   import NatF.*
 
   given Functor[NatF] with
-    def apply[A, B](fa: NatF[A], f: A => B): NatF[B] =
+    def apply[A, B](fa: NatF[A])(f: A => B): NatF[B] =
       fa match
         case fa @ ZeroF => fa.asInstanceOf[NatF[B]]
         case SuccF(a1)  => SuccF(f(a1))

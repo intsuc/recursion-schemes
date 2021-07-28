@@ -8,7 +8,7 @@ class ArithmeticSuite extends FunSuite:
   import ExpF.*
 
   given Functor[ExpF] with
-    def apply[A, B](fa: ExpF[A], f: A => B): ExpF[B] =
+    def apply[A, B](fa: ExpF[A])(f: A => B): ExpF[B] =
       fa match
         case fa @ NumF(_) => fa.asInstanceOf[ExpF[B]]
         case AddF(a1, a2) => AddF(f(a1), f(a2))
