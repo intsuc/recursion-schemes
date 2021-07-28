@@ -12,10 +12,11 @@ extension [F[*]: Functor, A](a: A)
 
 extension [F[*]: Functor, A, B](fix: Fix[F])
   def mutu(
-      algebras: (Algebra[[A] =>> F[(A, B)], A], Algebra[[B] =>> F[(A, B)], B])
+      left: Algebra[[A] =>> F[(A, B)], A],
+      right: Algebra[[B] =>> F[(A, B)], B]
   ): (A, B) =
-    fix cata (fab => (algebras._1(fab), algebras._2(fab)))
+    fix cata (fab => (left(fab), right(fab)))
 
 extension [F[*]: Functor, A, B](fix: Fix[F])
-  def zygo(algebras: (Algebra[[A] =>> F[(A, B)], A], Algebra[F, B])): A =
-    (fix mutu (algebras._1, fab => algebras._2(summon(fab)(_._2))))._1
+  def zygo(left: Algebra[[A] =>> F[(A, B)], A], right: Algebra[F, B]): A =
+    (fix mutu (left, fab => right(summon(fab)(_._2))))._1
