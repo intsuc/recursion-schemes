@@ -1,3 +1,7 @@
+extension [F[*]: Functor, A, B](a: A)
+  def hylo(coalgebra: Coalgebra[F, A], algebra: Algebra[F, B]): B =
+    algebra(summon(coalgebra(a))(_ hylo (coalgebra, algebra)))
+
 extension [F[*]: Functor, A](fix: Fix[F])
   def cata(algebra: Algebra[F, A]): A =
     algebra(summon(fix.unfix)(_ cata algebra))
