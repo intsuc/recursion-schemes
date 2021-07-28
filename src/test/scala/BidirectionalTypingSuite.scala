@@ -36,7 +36,7 @@ class BidirectionalTypingSuite extends FunSuite:
   val check: Algebra[[Check] =>> ExpF[(Check, Infer)], Check] =
     case VarF(i) => ctx => typ => for t <- ctx.lift(i) if t == typ yield ()
     case UnitF =>
-      ctx =>
+      _ =>
         case Typ.Unit => Some(())
         case _        => None
     case AbsF((c1, _)) =>
@@ -50,12 +50,12 @@ class BidirectionalTypingSuite extends FunSuite:
             t1 <- i2(ctx)
             _ <- c1(ctx)(Typ.Fun(t1, typ))
           yield ()
-    case AnnF((_, i1), t) => ctx => typ => for _ <- i1(ctx) yield ()
+    case AnnF((_, i1), _) => ctx => _ => for _ <- i1(ctx) yield ()
 
   val infer: Algebra[[Infer] =>> ExpF[(Check, Infer)], Infer] =
-    case VarF(i)        => ctx => ctx.lift(i)
-    case UnitF          => ctx => Some(Typ.Unit)
-    case AbsF((c1, i1)) => ctx => None
+    case VarF(i) => ctx => ctx.lift(i)
+    case UnitF   => _ => Some(Typ.Unit)
+    case AbsF(_) => _ => None
     case AppF((_, i1), (c2, _)) =>
       ctx =>
         for
