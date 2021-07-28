@@ -3,7 +3,7 @@ trait Functor[F[*]]:
 
 object Functor:
   inline def apply[F[*]: Functor, A, B](fa: F[A])(f: A => B): F[B] =
-    summon(fa)(f)
+    summon[Functor[F]](fa)(f)
 
 type Algebra[F[*], A] = F[A] => A
 
@@ -16,7 +16,7 @@ type RCoalgebra[F[*], A] = A => F[Either[Fix[F], A]]
 type Fix[F[*]]
 
 extension [F[*]: Functor](unfix: F[Fix[F]])
-  inline def fix: Fix[F] = unfix.asInstanceOf
+  inline def fix: Fix[F] = unfix.asInstanceOf[Fix[F]]
 
 extension [F[*]: Functor](fix: Fix[F])
-  inline def unfix: F[Fix[F]] = fix.asInstanceOf
+  inline def unfix: F[Fix[F]] = fix.asInstanceOf[F[Fix[F]]]
