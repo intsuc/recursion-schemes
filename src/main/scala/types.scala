@@ -1,6 +1,10 @@
 trait Functor[F[*]]:
   def apply[A, B](fa: F[A])(f: A => B): F[B]
 
+object Functor:
+  inline def apply[F[*]: Functor, A, B](fa: F[A])(f: A => B): F[B] =
+    summon(fa)(f)
+
 type Algebra[F[*], A] = F[A] => A
 
 type Coalgebra[F[*], A] = A => F[A]

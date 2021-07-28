@@ -1,6 +1,6 @@
 extension [F[*]: Functor, A, B](a: A)
   def hylo(coalgebra: Coalgebra[F, A], algebra: Algebra[F, B]): B =
-    algebra(summon(coalgebra(a))(_ hylo (coalgebra, algebra)))
+    algebra(Functor(coalgebra(a))(_ hylo (coalgebra, algebra)))
 
 extension [F[*]: Functor, A](fix: Fix[F])
   def cata(algebra: Algebra[F, A]): A =
@@ -19,4 +19,4 @@ extension [F[*]: Functor, A, B](fix: Fix[F])
 
 extension [F[*]: Functor, A, B](fix: Fix[F])
   def zygo(left: Algebra[[A] =>> F[(A, B)], A], right: Algebra[F, B]): A =
-    (fix mutu (left, fab => right(summon(fab)(_._2))))._1
+    (fix mutu (left, fab => right(Functor(fab)(_._2))))._1
