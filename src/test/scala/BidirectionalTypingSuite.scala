@@ -13,13 +13,6 @@ class BidirectionalTypingSuite extends FunSuite:
     case AnnF(a1: A, t: Typ)
   import ExpF.*
 
-  type Exp = Fix[ExpF]
-  inline def Var(i: Int): Exp = VarF(i).fix
-  inline def Unit: Exp = UnitF.fix
-  inline def Abs(a1: Exp): Exp = AbsF(a1).fix
-  inline def App(a1: Exp, a2: Exp): Exp = AppF(a1, a2).fix
-  inline def Ann(a1: Exp, t: Typ): Exp = AnnF(a1, t).fix
-
   given Functor[ExpF] with
     def apply[A, B](fa: ExpF[A], f: A => B): ExpF[B] =
       fa match
@@ -28,6 +21,13 @@ class BidirectionalTypingSuite extends FunSuite:
         case AbsF(a1)     => AbsF(f(a1))
         case AppF(a1, a2) => AppF(f(a1), f(a2))
         case AnnF(a1, t)  => AnnF(f(a1), t)
+
+  type Exp = Fix[ExpF]
+  inline def Var(i: Int): Exp = VarF(i).fix
+  inline def Unit: Exp = UnitF.fix
+  inline def Abs(a1: Exp): Exp = AbsF(a1).fix
+  inline def App(a1: Exp, a2: Exp): Exp = AppF(a1, a2).fix
+  inline def Ann(a1: Exp, t: Typ): Exp = AnnF(a1, t).fix
 
   type Ctx[A] = Seq[Typ] => A
   type Check = Ctx[Typ => Option[Unit]]

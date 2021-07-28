@@ -7,17 +7,17 @@ class ArithmeticSuite extends FunSuite:
     case MulF(a1: A, a2: A)
   import ExpF.*
 
-  type Exp = Fix[ExpF]
-  inline def Num(i: Int): Exp = NumF(i).fix
-  inline def Add(a1: Exp, a2: Exp): Exp = AddF(a1, a2).fix
-  inline def Mul(a1: Exp, a2: Exp): Exp = MulF(a1, a2).fix
-
   given Functor[ExpF] with
     def apply[A, B](fa: ExpF[A], f: A => B): ExpF[B] =
       fa match
         case fa @ NumF(_) => fa.asInstanceOf[ExpF[B]]
         case AddF(a1, a2) => AddF(f(a1), f(a2))
         case MulF(a1, a2) => MulF(f(a1), f(a2))
+
+  type Exp = Fix[ExpF]
+  inline def Num(i: Int): Exp = NumF(i).fix
+  inline def Add(a1: Exp, a2: Exp): Exp = AddF(a1, a2).fix
+  inline def Mul(a1: Exp, a2: Exp): Exp = MulF(a1, a2).fix
 
   test("cata-eval") {
     val exp: Exp = Mul(Add(Num(1), Num(2)), Num(3))

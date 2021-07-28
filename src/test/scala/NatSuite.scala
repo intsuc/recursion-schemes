@@ -6,15 +6,15 @@ class NatSuite extends FunSuite:
     case SuccF(a1: A)
   import NatF.*
 
-  type Nat = Fix[NatF]
-  inline def Zero: Nat = ZeroF.fix
-  inline def Succ(a1: Nat): Nat = SuccF(a1).fix
-
   given Functor[NatF] with
     def apply[A, B](fa: NatF[A], f: A => B): NatF[B] =
       fa match
         case fa @ ZeroF => fa.asInstanceOf[NatF[B]]
         case SuccF(a1)  => SuccF(f(a1))
+
+  type Nat = Fix[NatF]
+  inline def Zero: Nat = ZeroF.fix
+  inline def Succ(a1: Nat): Nat = SuccF(a1).fix
 
   test("mutu-even-odd") {
     val nat: Nat = Succ(Succ(Succ(Zero)))
