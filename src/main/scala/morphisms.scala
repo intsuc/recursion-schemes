@@ -10,6 +10,18 @@ extension [F[*]: Functor, A](a: A)
   def ana(coalgebra: Coalgebra[F, A]): Fix[F] =
     a hylo (coalgebra, _.fix)
 
+extension [F[*]: Functor, A](fix: Fix[F])
+  def para(ralgebra: RAlgebra[F, A]): A =
+    fix hylo (_.unfix, fa => ralgebra(Functor(fa)((fix, _))))
+
+extension [F[*]: Functor, A](a: A)
+  def apo(rcoalgebra: RCoalgebra[F, A]): Fix[F] =
+    a hylo (a =>
+      Functor(rcoalgebra(a)) {
+        case Left(_)  => a
+        case Right(a) => a
+      }, _.fix)
+
 extension [F[*]: Functor, A, B](fix: Fix[F])
   def mutu(
       left: Algebra[[A] =>> F[(A, B)], A],

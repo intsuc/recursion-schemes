@@ -9,6 +9,10 @@ type Algebra[F[*], A] = F[A] => A
 
 type Coalgebra[F[*], A] = A => F[A]
 
+type RAlgebra[F[*], A] = F[(Fix[F], A)] => A
+
+type RCoalgebra[F[*], A] = A => F[Either[Fix[F], A]]
+
 type Fix[F[*]]
 
 extension [F[*]: Functor](unfix: F[Fix[F]])
