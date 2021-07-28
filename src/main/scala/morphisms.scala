@@ -11,3 +11,7 @@ extension [F[*]: Functor, A, B](fix: Fix[F])
       algebras: (Algebra[[A] =>> F[(A, B)], A], Algebra[[B] =>> F[(A, B)], B])
   ): (A, B) =
     fix cata (fab => (algebras._1(fab), algebras._2(fab)))
+
+extension [F[*]: Functor, A, B](fix: Fix[F])
+  def zygo(algebras: (Algebra[[A] =>> F[(A, B)], A], Algebra[F, B])): A =
+    (fix mutu (algebras._1, fab => algebras._2(summon(fab)(_._2))))._1
