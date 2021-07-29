@@ -16,6 +16,16 @@ class NatSuite extends FunSuite:
   inline def Zero: Nat = ZeroF.fix
   inline def Succ(a1: Nat): Nat = SuccF(a1).fix
 
+  test("para-pred") {
+    val nat: Nat = Succ(Succ(Succ(Zero)))
+
+    val pred: RAlgebra[NatF, Nat] =
+      case ZeroF          => Zero
+      case SuccF((n1, _)) => n1
+
+    assertEquals(nat para pred, Succ(Succ(Zero)))
+  }
+
   test("mutu-even-odd") {
     val nat: Nat = Succ(Succ(Succ(Zero)))
 

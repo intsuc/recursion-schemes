@@ -45,3 +45,31 @@ class ArithmeticSuite extends FunSuite:
       case i               => MulF(2, i / 2)
     assertEquals(7 ana bin, exp)
   }
+
+  test("para-eq") {
+    val exp1: Exp = Mul(Add(Num(1), Num(2)), Num(3))
+    val exp2: Exp = Mul(Add(Num(1), Num(2)), Num(3))
+    val exp3: Exp = Mul(Add(Num(1), Num(2)), Num(4))
+
+    val eq: Exp => Exp => Boolean =
+      _ cata {
+        case NumF(i) =>
+          _ cata {
+            case NumF(j) => i == j
+            case _       => false
+          }
+        case AddF(a1, a2) =>
+          _ para {
+            case AddF((e1, _), (e2, _)) => a1(e1) && a2(e2)
+            case _                      => false
+          }
+        case MulF(a1, a2) =>
+          _ para {
+            case MulF((e1, _), (e2, _)) => a1(e1) && a2(e2)
+            case _                      => false
+          }
+      }
+
+    assertEquals(eq(exp1)(exp2), true)
+    assertEquals(eq(exp1)(exp3), false)
+  }

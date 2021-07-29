@@ -12,15 +12,14 @@ extension [F[*]: Functor, A](a: A)
 
 extension [F[*]: Functor, A](fix: Fix[F])
   def para(ralgebra: RAlgebra[F, A]): A =
-    fix hylo (_.unfix, fa => ralgebra(Functor(fa)((fix, _))))
+    ralgebra(Functor(fix.unfix)(fix => (fix, fix para ralgebra)))
 
 extension [F[*]: Functor, A](a: A)
   def apo(rcoalgebra: RCoalgebra[F, A]): Fix[F] =
-    a hylo (a =>
-      Functor(rcoalgebra(a)) {
-        case Left(_)  => a
-        case Right(a) => a
-      }, _.fix)
+    Functor(rcoalgebra(a)) {
+      case Left(fix) => fix
+      case Right(a)  => a apo rcoalgebra
+    }.fix
 
 extension [F[*]: Functor, A, B](fix: Fix[F])
   def mutu(
